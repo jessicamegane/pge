@@ -2,7 +2,7 @@ from core.parameters import params
 import json
 import os
 
-def evolution_progress(run, gen, population, best, gram):
+def evolution_progress(gen, population, best, gram):
     """ Function that saves the grammar and population of the current generation and run. """
     data = '%d,%s,%f,%f' %(gen,"".join(best['phenotype']), best['fitness'], best['tst_error'])
     if params['VERBOSE']:
@@ -10,7 +10,7 @@ def evolution_progress(run, gen, population, best, gram):
     save_progress_to_file(data)
 
     to_save = []
-    to_save.append({"grammar": gram.get_dict()})
+    to_save.append({"grammar": gram.get_dict})
 
     if params['SAVE_POP']:
         for index, ind in enumerate(population):
@@ -19,7 +19,7 @@ def evolution_progress(run, gen, population, best, gram):
                 "fitness": ind['fitness'],
                 "id": index
             })
-    folder = params['PATH'] + 'last_' + str(run)
+    folder = params['PATH'] + 'last_' + str(params['RUN'])
     if not os.path.exists(folder):
         os.makedirs(folder,  exist_ok=True)
     with open('%s/generation_%d.json' % (folder,(gen)), 'w') as f:
