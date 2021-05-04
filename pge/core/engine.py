@@ -33,7 +33,7 @@ def mapping_function(genotype):
     """ Genotype-phenotype mapping function. Returns the phenotype and a counter.
     The counter stores the number of times each production rule was expanded. 
     The counter is later used on the function to update the PCFG's probabilities."""
-    start = grammar.get_start()
+    start = grammar.start_rule()
     phenotype = [start]
 
     ind_pointer = 0
@@ -50,8 +50,7 @@ def mapping_function(genotype):
         
         codon = genotype[pos]
         symbol = phenotype.pop(ind_pointer)
-
-        productions = grammar.get_dict[symbol]     # get rules from symbol NT
+        productions = grammar.get_dict()[symbol]     # get rules from symbol NT
 
         if params['PGE']:
             idx_selected_rule = probabilistic_mapping(codon, productions)
@@ -63,18 +62,18 @@ def mapping_function(genotype):
         # append at the beggining of the list
         p = ind_pointer
         for prod in productions[idx_selected_rule][0]:
-            phenotype.insert(p,prod)    # append selected production
+            phenotype.insert(p,prod[0])    # append selected production
             p += 1
         if grammar.is_individual_t(phenotype):
             break
         else:
             for _ in range(ind_pointer, len(phenotype)):
-                if grammar.is_NTerminal(phenotype[ind_pointer]):
+                if phenotype[ind_pointer] in grammar.get_non_terminals():
                     break
                 else:
                     ind_pointer += 1
         pos += 1
-    return phenotype, gram_counter
+    return "".join(phenotype), gram_counter
 
 
 def init_population():
@@ -94,6 +93,8 @@ def evaluate(evaluation_function, population):
         The individual's genotype is mapped before evaluating."""
     for ind in tqdm(population):
         ind['phenotype'], ind['gram_counter'] = mapping_function(ind['genotype'])
+        if grammar.get_grammar_file().endswith("pybnf"):
+            ind['phenotype'] = grammar.python_filter(ind['phenotype'])
         trn_error, tst_error = evaluation_function(ind['phenotype'])
         ind['fitness'] = trn_error
         ind['tst_error'] = tst_error
@@ -114,9 +115,9 @@ def evolutionary_algorithm(evaluation_function):
         
         if params['PGE']:
             if not flag:
-                update_probs(best_overall, params['LEARNING_FACTOR'], grammar)
+                update_probs(best_overall, params['LEARNING_FACTOR'])
             else:
-                update_probs(best_generation, params['LEARNING_FACTOR'], grammar)
+                update_probs(best_generation, params['LEARNING_FACTOR'])
             flag = not flag
 
         logger.evolution_progress(it, population, best_overall, grammar)
