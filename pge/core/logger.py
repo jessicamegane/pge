@@ -10,7 +10,7 @@ def evolution_progress(gen, population, best, gram):
     save_progress_to_file(data)
 
     to_save = []
-    to_save.append({"grammar": gram.get_dict})
+    to_save.append({"grammar": gram.get_dict()})
 
     if params['SAVE_POP']:
         for index, ind in enumerate(population):
