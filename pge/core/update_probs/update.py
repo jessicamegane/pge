@@ -1,5 +1,6 @@
+import core.grammar as grammar
 
-def update_probs(best, lf, gram):
+def update_probs(best, lf):
     """ Function to update the probabilities of the PCFG,
     based on the productions chosen to construct the selected individual.
     """
@@ -10,7 +11,7 @@ def update_probs(best, lf, gram):
             l = [0] * len(val)
             for pos in range(len(val)):
                 counter = val[pos]
-                old_prob = gram.get_dict[key][pos][1]
+                old_prob = grammar.get_dict()[key][pos][1]
                 prob_updated = old_prob
                 if counter > 0:
                     prob_updated = round(min(old_prob + lf * counter / total, 1.0),14)
@@ -35,7 +36,7 @@ def update_probs(best, lf, gram):
                         l[i] = min(diff,1.0)
 
             for i in range(len(l)):
-                gram.get_dict[key][i][1] = l[i]
+                grammar.get_dict()[key][i][1] = l[i]
 
     print("Probabilities updated")
-    print(gram.get_dict)
+    print(grammar.get_dict())
