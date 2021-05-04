@@ -43,11 +43,8 @@ prog3(prog3(move_forward,
 fitness = (89,)
 """
 
-import sys
-import logging
 import copy
 import random
-import string
 from functools import partial
 
 def dummy():
@@ -149,30 +146,25 @@ class AntSimulator():
 
     def __call__(self, individual):
         if individual == None:
-            # return (self.invalid_fitness, {'generation':0,"moves_needed" : self.max_moves, "evals" : 1, "test_error" : 0})
-            return self.invalid_fitness, -1
+            return self.invalid_fitness, -
 
-        # self.runstring(individual,False)
         callable_ = False
-        routine = self.python_filter("".join(individual))
         self._reset()
         while self.moves < self.max_moves and self.eaten != 89:
             last = self.moves
             try:
                 if callable_:
-                    eval(routine,{'ant':self,'prog3':prog3,
+                    eval(individual,{'ant':self,'prog3':prog3,
                                   'prog2':prog2, 'progN':progN, 'dummy':dummy})()
                 else:
-                    exec(routine,{'ant':self})
+                    exec(individual,{'ant':self})
                 #protection for circuits that don't make the ant move
                 #loosing energy
                 if last == self.moves:
                     self.moves+=1
             except SyntaxError:
-                # print("SYNTAX ERROR:\n"+routine)
                 return self.invalid_fitness, -1
 
-        # return (self.total_pieces-self.eaten, {'generation':0, "moves_needed" : self.moves, "evals" : 1, "test_error" : 0})
         return self.total_pieces-self.eaten, -1
 
     def parse_matrix(self, matrix):
@@ -200,34 +192,6 @@ class AntSimulator():
 
     def setup(self, *args):
         self.random_number_generator = args[0]
-
-    def python_filter(self,txt):
-        """ Create correct python syntax.
-        We use {: and :} as special open and close brackets, because
-        it's not possible to specify indentation correctly in a BNF
-        grammar without this type of scheme."""
-        txt = txt.replace("\le", "<=")
-        txt = txt.replace("\ge", ">=")
-        txt = txt.replace("\l", "<")
-        txt = txt.replace("\g", ">")
-        txt = txt.replace("\eb", "|")
-        indent_level = 0
-        tmp = txt[:]
-        i = 0
-        while i < len(tmp):
-            tok = tmp[i:i+2]
-            if tok == "{:":
-                indent_level += 1
-            elif tok == ":}":
-                indent_level -= 1
-            tabstr = "\n" + "  " * indent_level
-            if tok == "{:" or tok == ":}" or tok == "\\n":
-                tmp = tmp.replace(tok, tabstr, 1)
-            i += 1
-            # Strip superfluous blank lines.
-            txt = "\n".join([line for line in tmp.split("\n") if line.strip() != ""])
-        return txt
-
 
 if __name__ == "__main__":
     import core

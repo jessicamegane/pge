@@ -14,18 +14,18 @@ class StringMatch():
     # maximise = False
     def __init__(self, target = "pge"):
         self.target = target
+        self.invalid_fitness = 100000
     
-    def __call__(self, guess):
-        fitness = max(len(self.target), len(guess))
-        if (len(self.target) == len(guess)):
-            fitness += 100 
+    def __call__(self, phenotype):
+        fitness = max(len(self.target), len(phenotype))
         # Loops as long as the shorter of two strings
-        for (t_p, g_p) in zip(self.target, guess):
+        for (t_p, g_p) in zip(self.target, phenotype):
             if t_p == g_p:
-                fitness += 2
-            else:
                 fitness -= 1
-        return fitness
+            else:
+                # Imperfect match, find ASCII distance to match.
+                fitness -= 1 / (1 + (abs(ord(t_p) - ord(g_p))))
+        return fitness, -1
 
 if __name__ == "__main__":
     import core

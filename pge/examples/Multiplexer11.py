@@ -46,14 +46,13 @@ class Multiplexer11:
 
     def __init__(self):
         self.invalid_fitness = 1000
-    def __call__(self, fenotype):
+    def __call__(self, phenotype):
         """
         SOLUTION = "(i0 and (not s2) and (not s1) and (not s0)) or (i1 and (not s2) and (not s1) and (s0)) or (i2 and (not s2) and (s1) and (not s0)) or (i3 and (not s2) and (s1) and (s0)) or (i4 and s2 and not(s1) and not(s0)) or (i5 and s2 and (not s1) and s0) or (i6 and s2 and s1 and (not s0)) or (i7 and s2 and s1 and s0)"
         """
-        f = "".join(fenotype)
         error = len(inputs)
         try:
-            program = compile("res = " + f, '<string>', 'exec')
+            program = compile("res = " + phenotype, '<string>', 'exec')
         except(SyntaxError, MemoryError):
             return self.invalid_fitness, -1
         for i, variables in enumerate(to_evaluate):

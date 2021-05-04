@@ -10,17 +10,16 @@ class BostonHousing():
         self.invalid_fitness = 9999999
         self.read_dataset()
 
-    def __call__(self, fenotype):
-        f = "".join(fenotype)
-        f = f.replace("\eb", "|")
+    def __call__(self, phenotype):
+        phenotype = phenotype.replace("\eb", "|")
         
-        trn_error = self.get_error(f, self.train_set)
-        tst_error = self.get_error(f, self.test_set)
+        trn_error = self.get_error(phenotype, self.train_set)
+        tst_error = self.get_error(phenotype, self.test_set)
 
         return trn_error, tst_error
 
  
-    def get_error(self, fenotype, dataset):
+    def get_error(self, phenotype, dataset):
         targets = []
         outputs = []
         fitness = 0
@@ -29,7 +28,7 @@ class BostonHousing():
             target = case[-1]
             targets.append(target)
             try:
-                output = eval(fenotype, globals(), {"x": case[:-1]})
+                output = eval(phenotype, globals(), {"x": case[:-1]})
                 if isnan(output):
                     return self.invalid_fitness
                 elif isinf(output):

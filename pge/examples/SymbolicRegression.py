@@ -72,8 +72,7 @@ class SymbolicRegression():
                 return self.invalid_fitness
         return pred_error
 
-    def __call__(self, fenotype):
-        individual = "".join(fenotype)
+    def __call__(self, individual):
         individual = individual.replace("\eb", "|")
         error = 0.0
         test_error = -1.0
@@ -95,5 +94,5 @@ class SymbolicRegression():
 
 if __name__ == "__main__":
     import core
-    eval_func = SymbolicRegression("quartic")
+    eval_func = SymbolicRegression("pagie")
     core.evolutionary_algorithm(evaluation_function=eval_func)

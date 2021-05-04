@@ -30,12 +30,11 @@ class Parity5():
     def __init__(self):
         self.invalid_fitness = 1000
 
-    def __call__(self, fenotype):
-        f = "".join(fenotype)
+    def __call__(self, phenotype):
         error = PARITY_SIZE_M
         for i, inpt in enumerate(inputs):
             try:
-                res = eval(f, dict(zip(input_names, inpt)))
+                res = eval(phenotype, dict(zip(input_names, inpt)))
             except(SyntaxError, ValueError, OverflowError, MemoryError, RuntimeWarning):
                 return self.invalid_fitness, -1
 
