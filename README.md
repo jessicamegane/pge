@@ -27,11 +27,32 @@ The original PGE article can be referenced using the following bibtex:
 
 ## Requirements
 
-This code needs python3.5 or a newer version. More detail on the required libraries can be found in the *requirements.txt* file.
+This code needs python3.5 or a newer version. More detail on the required libraries can be found in the `requirements.txt` file.
 
+## Execution
+
+The folder `examples/` contains the code for some benchmark problems used in GP. To run, for example, Symbolic Regression, you can use the following command:
+
+```
+$ cd pge
+$ python3 -m examples.SymbolicRegression --experiment_name test_pge/quartic --grammar grammars/regression.bnf --learning_factor 0.01
+```
+
+A folder will be automatically created with the path `test_pge/quartic/0.01/`, which will contain:
+* a file `parameters.json`, which stores the values used by the algorithm;
+* a file `data.txt`, in which the phenotype and the fitness of the best individual of each generation are stored
+* for each run *i*, a `last_i/` folder is created, which contains a *.json* file for each generation, which stores the grammar and its probabilities in dictionary format, that was used to update the individuals of that generation, and, if the `--save_pop` flag is active, it stores the information of all the individuals of that generation.
+
+To view for each generation the statistics during the run, you can run the code with the `--verbose` argument. It will show the phenotype and fitness of the best individual of each generation.
+
+To see the full list of arguments that can be changed via the command line, you can run the following command:
+
+`
+$ python3 -m examples.SymbolicRegression --help
+`
 ## Support
 
-Any questions, comments or suggestion should be directed to Jessica Mégane (jessicac@student.dei.uc.pt) or Nuno Lourenço (naml@dei.uc.pt).
+Any questions, comments, or suggestions should be directed to Jessica Mégane (jessicac@student.dei.uc.pt) or Nuno Lourenço (naml@dei.uc.pt).
 
 ## References
 
