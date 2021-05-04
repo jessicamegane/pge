@@ -29,8 +29,6 @@ def setup():
     grammar.read_grammar()
     numpy.random.seed(params['SEED'])
 
-# TODO: add recursive mapping function
-# TODO: add wrap code
 def mapping_function(genotype):
     """ Genotype-phenotype mapping function. Returns the phenotype and a counter.
     The counter stores the number of times each production rule was expanded. 
