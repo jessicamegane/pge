@@ -37,17 +37,10 @@ def mapping_function(genotype):
     phenotype = [start]
 
     ind_pointer = 0
-    wrap_counter = 0
+    wraps = -1
     pos = 0
     gram_counter = copy.deepcopy(grammar.get_counter())
-    while pos < len(genotype):
-        if (pos >= len(genotype) - 1 and wrap_counter < params['MAX_WRAPS']):
-            wrap_counter += 1
-            pos = 0
-        elif wrap_counter == params['MAX_WRAPS']:
-            # individuo invalido
-            break
-        
+    while wraps < params['MAX_WRAPS']:        
         codon = genotype[pos]
         symbol = phenotype.pop(ind_pointer)
         productions = grammar.get_dict()[symbol]     # get rules from symbol NT
@@ -73,6 +66,9 @@ def mapping_function(genotype):
                 else:
                     ind_pointer += 1
         pos += 1
+        if pos >= len(genotype):
+            pos = 0
+            wraps += 1
     return "".join(phenotype), gram_counter
 
 
@@ -109,9 +105,8 @@ def evolutionary_algorithm(evaluation_function):
     for it in range(0, params['GENERATIONS']):
         
         population.sort(key=lambda x: x['fitness'])
-
         if population[0]['fitness'] <= best_overall.setdefault('fitness', evaluation_function.invalid_fitness):
-            best_overall = copy.deepcopy(population [0])
+            best_overall = copy.deepcopy(population[0])
         
         if params['PGE']:
             if not flag:
