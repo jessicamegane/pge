@@ -75,10 +75,27 @@ def set_parameters(arguments):
                         dest='PROB_MUTATION',
                         type=float,
                         help='Specifies the probability of mutation usage. Float required.')
-    parser.add_argument('--tsize',
-                        dest='TSIZE',
+    parser.add_argument('--t_size',
+                        dest='T_SIZE',
                         type=int,
                         help='Specifies the tournament size for parent selection.')
+    parser.add_argument('--nr_cuts',
+                        dest='NR_CUTS',
+                        type=int,
+                        help='Specifies the number of cuts to do in the genotype during crossover.')
+    parser.add_argument('--size_genotype',
+                        dest='SIZE_GENOTYPE',
+                        type=int,
+                        help='Specifies number of codons in the genotype.')
+    parser.add_argument('--size_codon',
+                        dest='SIZE_CODON',
+                        type=int,
+                        help='Specifies the higher value that each codon of standard GE can be.'
+                            'The codon will be a random number in the interval [0,SIZE_CODON].')
+    parser.add_argument('--max_wraps',
+                        dest='MAX_WRAPS',
+                        type=int,
+                        help='Specifies the maximum number of wraps.')   
     parser.add_argument('--grammar',
                         dest='GRAMMAR',
                         type=str,
